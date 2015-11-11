@@ -18,9 +18,9 @@ It currently has one function and that is to query the provided index and return
 
 ##How to use
 
-1 Install the package with composer as above
-2 Add ````Plugin::load('Sphinx');```` to your bootstrap.php
-3 Attach the behaviour to a table you wish to search on 
+* Install the package with composer as above
+* Add ````Plugin::load('Sphinx');```` to your bootstrap.php
+* Attach the behaviour to a table you wish to search on 
 (There must be an index that is generated from this model - the behaviour works by pulling the ID's from Sphinx and then fetching them from the DB (See TODO's for improving this)
 
 ```php
