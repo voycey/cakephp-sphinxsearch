@@ -20,7 +20,8 @@ It currently has one function and that is to query the provided index and return
 
 1 Install the package with composer as above
 2 Add ````Plugin::load('Sphinx');```` to your bootstrap.php
-3 Attach the behaviour to a table you wish to search on (that has an index for it!)
+3 Attach the behaviour to a table you wish to search on 
+(There must be an index that is generated from this model - the behaviour works by pulling the ID's from Sphinx and then fetching them from the DB (See TODO's for improving this)
 
 ```php
 <?php 
@@ -42,13 +43,6 @@ class PostsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Tools.Slugged', [
-                                'label' => 'title', 
-                                'unique' => true, 
-                                'mode' => 'ascii', 
-                                'case' => 'low']
-                            );
-                                    
         $this->addBehavior('Sphinx.Sphinx');
     }
 }
@@ -107,5 +101,6 @@ public function testBehaviour()
 ```
 ###TODO
 * Allow for custom configuration to be passed in
+* Give option for all data to be pulled from Sphinxsearch directly rather than then querying DB
 * Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
 * Work out how to test this easily on Travis (again - help appreciated)
