@@ -22,7 +22,7 @@ It currently has one function and that is to query the provided index and return
 2 Add ````Plugin::load('Sphinx');```` to your bootstrap.php
 3 Attach the behaviour to a table you wish to search on (that has an index for it!)
 
-````
+```php
 <?php 
 class PostsTable extends Table
 {
@@ -47,16 +47,22 @@ class PostsTable extends Table
     }
 }
 ?>
-````
+```
+
 4 Perform a search through the behaviour directly (This will return a query object), it takes an array of the following parameters:
-..1 ````index```` - this is the index you want to search against
-..2 ````term````` - this is the term you want to search for
-..3 ````match_fields```` - these are the fields you want to search against (default is search whole index)
-..4 ````pagination```` - this is a standard Cake 3 pagination array - allows you to define how your data comes back, what fields it contains and what Models are contained.
+
+  1 ````index```` - this is the index you want to search against
+  
+  2 ````term````` - this is the term you want to search for
+  
+  3 ````match_fields```` - these are the fields you want to search against (default is search whole index)
+  
+  4 ````pagination```` - this is a standard Cake 3 pagination array - allows you to define how your data comes back, what fields it contains and what Models are contained.
+  
 
 Here is an example unit test that works for me.
-````
-<?php 
+```php
+
 public function testBehaviour()
 {
     $paginate = [
@@ -86,13 +92,8 @@ public function testBehaviour()
     $this->assertInstanceOf('Cake\ORM\Entity', $row);
 
 }
-?>
-````
-
-##TODO
-
-
-# Allow for custom configuration to be passed in
-# Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
-# Work out how to test this easily on Travis (again - help appreciated)
-
+```
+###TODO
+* Allow for custom configuration to be passed in
+* Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
+* Work out how to test this easily on Travis (again - help appreciated)
