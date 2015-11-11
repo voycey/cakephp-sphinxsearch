@@ -1,3 +1,6 @@
 <?php
-require dirname(__DIR__) . '/config/bootstrap.php';
+	function pointless() {
+		return true;
+	}
+pointless();
 ?>
