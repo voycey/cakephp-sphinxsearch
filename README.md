@@ -89,7 +89,8 @@ public function testBehaviour()
 ?>
 ````
 
-#TODO
+##TODO
+
 
 # Allow for custom configuration to be passed in
 # Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
