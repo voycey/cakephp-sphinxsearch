@@ -42,7 +42,11 @@ class PostsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Tools.Slugged', ['label' => 'title', 'unique' => true, 'mode' => 'ascii', 'case' => 'low']);
+        $this->addBehavior('Tools.Slugged', [
+                                    'label' => 'title', 
+                                    'unique' => true, 
+                                    'mode' => 'ascii', 
+                                    'case' => 'low']);
         $this->addBehavior('Sphinx.Sphinx');
     }
 }
