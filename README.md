@@ -43,10 +43,12 @@ class PostsTable extends Table
 
         $this->addBehavior('Timestamp');
         $this->addBehavior('Tools.Slugged', [
-                                    'label' => 'title', 
-                                    'unique' => true, 
-                                    'mode' => 'ascii', 
-                                    'case' => 'low']);
+                                'label' => 'title', 
+                                'unique' => true, 
+                                'mode' => 'ascii', 
+                                'case' => 'low']
+                            );
+                                    
         $this->addBehavior('Sphinx.Sphinx');
     }
 }
@@ -90,10 +92,11 @@ public function testBehaviour()
     ];
 
     $query = $this->Posts->search([
-                                'index' => 'idx_toolkit', 
-                                'term' => 'Ten', 
-                                'match_fields' => 'title', 
-                                'paginate' => $paginate]);
+                                    'index' => 'idx_toolkit', 
+                                    'term' => 'Ten', 
+                                    'match_fields' => 'title', 
+                                    'paginate' => $paginate
+                                ]);
     
     $row = $query->first();
 
