@@ -85,7 +85,12 @@ public function testBehaviour()
         ]
     ];
 
-    $query = $this->Posts->search(['index' => 'idx_toolkit', 'term' => 'Ten', 'match_fields' => 'title', 'paginate' => $paginate]);
+    $query = $this->Posts->search([
+                        'index' => 'idx_toolkit', 
+                        'term' => 'Ten', 
+                        'match_fields' => 'title', 
+                        'paginate' => $paginate]
+                        );
     $row = $query->first();
 
     $this->assertInstanceOf('Cake\ORM\Query', $query);
