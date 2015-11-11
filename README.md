@@ -11,3 +11,4 @@ composer require voycey/Sphinx
 ```
 
 Documentation to follow once up on Packagist
+Tests are being attempted
