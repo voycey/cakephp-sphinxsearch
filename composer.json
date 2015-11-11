@@ -1,5 +1,5 @@
 {
-    "name": "voycey/Sphinx",
+    "name": "voycey/sphinxsearch",
     "description": "Sphinxsearch plugin for CakePHP 3.x",
     "type": "cakephp-plugin",
     "require": {
