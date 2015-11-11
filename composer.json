@@ -2,6 +2,8 @@
     "name": "voycey/sphinxsearch-cakephp3",
     "description": "Sphinxsearch plugin for CakePHP 3.x",
     "type": "cakephp-plugin",
+    "homepage": "https://github.com/voycey/sphinxsearch-cakephp3",
+    "license": "MIT",
     "require": {
         "php": ">=5.4.16",
         "cakephp/cakephp": "~3.0",
