@@ -18,10 +18,12 @@ class SphinxBehavior extends Behavior
     public function __construct(Table $table, array $config = []) {
         $this->conn = new Connection();
         $this->table = $table;
+        $default_config = ['host' => 'localhost', 'port' => 9306];
+
         if (empty($config)) {
-            $this->conn->setParams(array('host' => 'localhost', 'port' => 9306));
+            $this->conn->setParams($default_config);
         } else {
-            $this->conn->setParams(array('host' => $config['host'], 'port' => $config['port']));
+            $this->conn->setParams(['host' => $config['host'], 'user' => $config['user'], 'password' => $config['password'], 'port' => $config['port']]);
         }
     }
 
