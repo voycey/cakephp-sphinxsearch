@@ -19,7 +19,6 @@ class SphinxBehavior extends Behavior
         $this->conn = new Connection();
         $this->table = $table;
         $this->conn->setParams(['host' => $config['host'], 'user' => $config['user'], 'password' => $config['password'], 'port' => $config['port']]);
-        }
     }
 
 
