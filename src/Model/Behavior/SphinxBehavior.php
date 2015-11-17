@@ -21,7 +21,7 @@ class SphinxBehavior extends Behavior
         if (empty($config)) {
             $this->conn->setParams(array('host' => 'localhost', 'port' => 9306));
         } else {
-            $this->conn->setParams(array('host' => $config['host'], 'port' => $config['port']);
+            $this->conn->setParams(array('host' => $config['host'], 'port' => $config['port']));
         }
     }
 
