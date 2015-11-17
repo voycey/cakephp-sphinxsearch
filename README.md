@@ -1,5 +1,7 @@
 # Sphinx plugin for CakePHP
 
+[![Build Status](https://travis-ci.org/voycey/sphinxsearch-cakephp3.svg)](https://travis-ci.org/voycey/sphinxsearch-cakephp3)
+
 ## Installation
 
 You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
@@ -18,9 +20,10 @@ It currently has one function and that is to query the provided index and return
 
 ##How to use
 
-1 Install the package with composer as above
-2 Add ````Plugin::load('Sphinx');```` to your bootstrap.php
-3 Attach the behaviour to a table you wish to search on (that has an index for it!)
+* Install the package with composer as above
+* Add ````Plugin::load('Sphinx');```` to your bootstrap.php
+* Attach the behaviour to a table you wish to search on 
+(There must be an index that is generated from this model - the behaviour works by pulling the ID's from Sphinx and then fetching them from the DB (See TODO's for improving this)
 
 ```php
 <?php 
@@ -42,22 +45,18 @@ class PostsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-        $this->addBehavior('Tools.Slugged', ['label' => 'title', 'unique' => true, 'mode' => 'ascii', 'case' => 'low']);
         $this->addBehavior('Sphinx.Sphinx');
     }
 }
 ?>
 ```
 
-4 Perform a search through the behaviour directly (This will return a query object), it takes an array of the following parameters:
+* Perform a search through the behaviour directly (This will return a query object), it takes an array of the following parameters:
 
-  1 ````index```` - this is the index you want to search against
-  
-  2 ````term````` - this is the term you want to search for
-  
-  3 ````match_fields```` - these are the fields you want to search against (default is search whole index)
-  
-  4 ````pagination```` - this is a standard Cake 3 pagination array - allows you to define how your data comes back, what fields it contains and what Models are contained.
+  * ````index```` - this is the index you want to search against
+  * ````term````` - this is the term you want to search for
+  * ````match_fields```` - these are the fields you want to search against (default is search whole index)
+  * ````pagination```` - this is a standard Cake 3 pagination array - allows you to define how your data comes back, what fields it contains and what Models are contained.
   
 
 Here is an example unit test that works for me.
@@ -86,10 +85,11 @@ public function testBehaviour()
     ];
 
     $query = $this->Posts->search([
-                                'index' => 'idx_toolkit', 
-                                'term' => 'Ten', 
-                                'match_fields' => 'title', 
-                                'paginate' => $paginate]);
+                                    'index' => 'idx_toolkit', 
+                                    'term' => 'Ten', 
+                                    'match_fields' => 'title', 
+                                    'paginate' => $paginate
+                                ]);
     
     $row = $query->first();
 
@@ -100,5 +100,6 @@ public function testBehaviour()
 ```
 ###TODO
 * Allow for custom configuration to be passed in
+* Give option for all data to be pulled from Sphinxsearch directly rather than then querying DB
 * Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
 * Work out how to test this easily on Travis (again - help appreciated)
