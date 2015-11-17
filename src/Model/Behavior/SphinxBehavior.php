@@ -35,8 +35,6 @@ class SphinxBehavior extends Behavior
             ->from($options['index'])
             ->match((empty($options['match_fields']) ? "*" : $options['match_fields']), $options['term']);
 
-
-
         $result = $sphinx->execute();
 
         $ids = Hash::extract($result, '{n}.id');
