@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/voycey/sphinxsearch-cakephp3.svg)](https://travis-ci.org/voycey/sphinxsearch-cakephp3)[![Latest Stable Version](https://poser.pugx.org/voycey/sphinxsearch-cakephp3/v/stable)](https://packagist.org/packages/voycey/sphinxsearch-cakephp3) [![Total Downloads](https://poser.pugx.org/voycey/sphinxsearch-cakephp3/downloads)](https://packagist.org/packages/voycey/sphinxsearch-cakephp3) [![Latest Unstable Version](https://poser.pugx.org/voycey/sphinxsearch-cakephp3/v/unstable)](https://packagist.org/packages/voycey/sphinxsearch-cakephp3) [![License](https://poser.pugx.org/voycey/sphinxsearch-cakephp3/license)](https://packagist.org/packages/voycey/sphinxsearch-cakephp3)
 
+## For earlier versions of CakePHP (2.x)
+Please use the 2.x branch and follow the readme instructions under that for usage instructions
+
 ## Installation
 
 You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
