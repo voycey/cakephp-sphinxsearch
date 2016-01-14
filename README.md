@@ -1,103 +1,61 @@
-# Sphinx plugin for CakePHP
+#Sphinx Search behaviour for CakePHP 2.x
+I spent a good few hours googling up on how to get this working so here is the fruits of my labour:
 
-## Installation
 
-You can install this plugin into your CakePHP application using [composer](http://getcomposer.org).
-
-The recommended way to install composer packages is:
-
-```
-composer require voycey/sphinxsearch-cakephp3
-```
-
-##Basic Documentation
-
-I designed this as a replacement for the binary API access for Sphinxsearch that I was using on 2.x (https://github.com/voycey/sphinxsearch-cakephp2)
-
-It currently has one function and that is to query the provided index and return the matching records in a CakePHP friendly format (In this case as Query objects and Entities).
-
-##How to use
-
-* Install the package with composer as above
-* Add ````Plugin::load('Sphinx');```` to your bootstrap.php
-* Attach the behaviour to a table you wish to search on 
-(There must be an index that is generated from this model - the behaviour works by pulling the ID's from Sphinx and then fetching them from the DB (See TODO's for improving this)
+* First install Sphinx
+* Get sphinxapi.php from the sphinx distribution and place it in app/vendors.
+* Setup an SQL Query for each index (my sphinx.conf is attached)
+* Restart searchd (searchd --stop && searchd)
+* Run the indexer (indexer --all)
+* Test on the command line (search "test")
+* Install this behaviour into your CakePHP app
+* Example search controller function is below using paginate
+* Use a GET method for your form in the view otherwise pagination will lose the search term
+* You can search a specific index by adding in 'index' => array('<index name>') into the sphinx array (I am searching the idx_posts index)
 
 ```php
-<?php 
-class PostsTable extends Table
-{
+public function search() {
+            $term = $this->request->query['term'];
+            $sphinx = array('matchMode' => 'SPH_MATCH_ALL', 'sortMode' => array('SPH_SORT_EXTENDED' => '@relevance DESC'), 'index' => array('idx_posts'));
+            $paginate = array(
+                'limit' => 30,
+                'contain' => array(
+                    'Upvote',
+                    'User.id',
+                    'User.first_name',
+                    'User.last_name',
+                    'User.email',
+                    'UserDetail.photo',
+                    'UserDetail.company',
+                    'Category.id',
+                    'Category.name',
+                    'Type.name'
+                ),
+                'fields'  => array(
+                    'id', 'title', 'body', 'image', 'comment_count', 'upvote_count', 'files', 'explore', 'implement', 'is70','is20','is10', 'free', 'slug', 'created', 'sponsored'
+                ),
+                'conditions' => array(),
+                'order' => array('Post.sponsored' => 'desc', 'Post.created' => 'desc', 'Post.upvote_count' => 'desc'),
+                'sphinx' => $sphinx,
+                'search' => $term
+            );
 
-    /**
-     * Initialize method
-     *
-     * @param  array $config The configuration for the Table.
-     * @return void
-     */
-    public function initialize(array $config)
-    {
-        parent::initialize($config);
+            $this->paginate = $paginate;
 
-        $this->table('posts');
-        $this->displayField('title');
-        $this->primaryKey('id');
+            $this->set('categories', $this->Post->Category->find('all', array('recursive' => -1, 'fields' => array('id','name'))));
+            $this->set('posts', $this->paginate());
+        }
 
-        $this->addBehavior('Timestamp');
-        $this->addBehavior('Sphinx.Sphinx');
-    }
-}
-?>
 ```
 
-* Perform a search through the behaviour directly (This will return a query object), it takes an array of the following parameters:
 
-  * ````index```` - this is the index you want to search against
-  * ````term````` - this is the term you want to search for
-  * ````match_fields```` - these are the fields you want to search against (default is search whole index)
-  * ````pagination```` - this is a standard Cake 3 pagination array - allows you to define how your data comes back, what fields it contains and what Models are contained.
-  
 
-Here is an example unit test that works for me.
-```php
 
-public function testBehaviour()
-{
-    $paginate = [
-        'order' => [
-            'Posts.id asc'
-        ],
-        'fields' => [
-            'id', 'title', 'user_id'
-        ],
-        'contain' => [
-            'Comments' => [
-                'fields' => ['id', 'post_id']
-            ],
-            'Categories' => [
-                'fields' => ['id', 'CategoriesPosts.post_id']
-            ],
-            'Types' => [
-                'fields' => ['id', 'name']
-            ]
-        ]
-    ];
 
-    $query = $this->Posts->search([
-                                    'index' => 'idx_toolkit', 
-                                    'term' => 'Ten', 
-                                    'match_fields' => 'title', 
-                                    'paginate' => $paginate
-                                ]);
-    
-    $row = $query->first();
+Forked from Nabeel Shahzad:
 
-    $this->assertInstanceOf('Cake\ORM\Query', $query);
-    $this->assertInstanceOf('Cake\ORM\Entity', $row);
+Updated version for the Sphinx Behavior by Vilen Tambovtsev
 
-}
-```
-###TODO
-* Allow for custom configuration to be passed in
-* Give option for all data to be pulled from Sphinxsearch directly rather than then querying DB
-* Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
-* Work out how to test this easily on Travis (again - help appreciated)
+The original usage page is here:
+
+http://bakery.cakephp.org/articles/xumix/2009/07/11/sphinx-behavior
