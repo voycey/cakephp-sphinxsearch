@@ -15,10 +15,10 @@ class SphinxBehavior extends Behavior
     public $conn;
     public $table;
 
-    public function __construct(Table $table, array $config = []) {
+    public function __construct(Table $table, array $config = ['host' => 'localhost', 'port' => 9306]) {
         $this->conn = new Connection();
         $this->table = $table;
-        $this->conn->setParams(array('host' => 'localhost', 'port' => 9306));
+        $this->conn->setParams(['host' => $config['host'], 'port' => $config['port']]);
     }
 
 
@@ -30,8 +30,6 @@ class SphinxBehavior extends Behavior
         $sphinx = SphinxQL::create($this->conn)->select('id')
             ->from($options['index'])
             ->match((empty($options['match_fields']) ? "*" : $options['match_fields']), $options['term']);
-
-
 
         $result = $sphinx->execute();
 
