@@ -33,20 +33,24 @@ class SphinxBehavior extends Behavior
 
         $result = $sphinx->execute();
 
-        $ids = Hash::extract($result, '{n}.id');
+        if (!empty($result)) {
 
-        $query = $this->table->find();
+            $ids = Hash::extract($result, '{n}.id');
+            
+            $query = $this->table->find();
+            
+            if (!empty($options['paginate']['fields'])) {
+                $query->select($options['paginate']['fields']);
+            }
+            
+            if (!empty($options['paginate']['contain'])) {
+                $query->contain($options['paginate']['contain']);
+            }
+            
+            $query->where([$this->table->alias() . '.id IN' => $ids]);
 
-        if (!empty($options['paginate']['fields'])) {
-            $query->select($options['paginate']['fields']);
+            return $query;
         }
-
-        if (!empty($options['paginate']['contain'])) {
-            $query->contain($options['paginate']['contain']);
-        }
-
-        $query->where([$this->table->alias() . '.id IN' => $ids]);
-
-        return $query;
+        return false;
     }
 }
