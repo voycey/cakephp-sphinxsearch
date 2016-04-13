@@ -29,7 +29,8 @@ class SphinxBehavior extends Behavior
     public function search($options) {
         $sphinx = SphinxQL::create($this->conn)->select('id')
             ->from($options['index'])
-            ->match((empty($options['match_fields']) ? "*" : $options['match_fields']), $options['term']);
+            ->match((empty($options['match_fields']) ? "*" : $options['match_fields']), $options['term'])
+            ->limit((empty($options['limit'])) ? 1000 : $options['limit']);
 
         $result = $sphinx->execute();
 
