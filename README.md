@@ -57,9 +57,10 @@ class PostsTable extends Table
 * Perform a search through the behaviour directly (This will return a query object), it takes an array of the following parameters:
 
   * ````index```` - this is the index you want to search against
-  * ````term````` - this is the term you want to search for
+  * ````term```` - this is the term you want to search for
   * ````match_fields```` - these are the fields you want to search against (default is search whole index)
   * ````pagination```` - this is a standard Cake 3 pagination array - allows you to define how your data comes back, what fields it contains and what Models are contained.
+  * ````limit```` - this is the number of results to limit to, currently defaults to 1000
   
 
 Here is an example unit test that works for me.
@@ -91,7 +92,8 @@ public function testBehaviour()
                                     'index' => 'idx_toolkit', 
                                     'term' => 'Ten', 
                                     'match_fields' => 'title', 
-                                    'paginate' => $paginate
+                                    'paginate' => $paginate,
+                                    'limit' => 50
                                 ]);
     
     $row = $query->first();
