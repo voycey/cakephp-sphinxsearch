@@ -6,8 +6,8 @@ use Cake\ORM\Entity;
 use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
+use Foolz\SphinxQL\Drivers\Mysqli\Connection;
 use Foolz\SphinxQL\SphinxQL;
-use Foolz\SphinxQL\Connection;
 
 
 class SphinxBehavior extends Behavior
