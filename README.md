@@ -28,8 +28,8 @@ It currently has one function and that is to query the provided index and return
 * Attach the behaviour to a table you wish to search on 
 (There must be an index that is generated from this model - the behaviour works by pulling the ID's from Sphinx and then fetching them from the DB (See TODO's for improving this)
 * Behavior config options:
-  * `'connection' => ['host' => 'hostname', 'port' => 'port']`
-  * `'defaultIndex' => 'index_name`
+  * `'connection' => ['host' => 'hostname', 'port' => 'port']` (default hostname is 'localhost' and default port is 9306)
+  * `'defaultIndex' => 'index_name'`
 
 ```php
 <?php 
