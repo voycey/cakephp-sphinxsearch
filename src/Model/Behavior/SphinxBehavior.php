@@ -2,43 +2,55 @@
 namespace Sphinx\Model\Behavior;
 
 use Cake\ORM\Behavior;
-use Cake\ORM\Entity;
-use Cake\ORM\Query;
-use Cake\ORM\Table;
 use Cake\Utility\Hash;
 use Foolz\SphinxQL\Drivers\Mysqli\Connection;
 use Foolz\SphinxQL\SphinxQL;
 
-
+/**
+ * Class SphinxBehavior
+ */
 class SphinxBehavior extends Behavior
 {
+    /** @var \Foolz\SphinxQL\Drivers\Mysqli\Connection */
     public $conn;
-    public $table;
 
-    public function __construct(Table $table, array $config = ['host' => 'localhost', 'port' => 9306]) {
+    /** @var array */
+    protected $_defaultConfig = [
+        'connection' => [
+            'host' => 'localhost',
+            'port' => '9306',
+        ],
+    ];
+
+    /**
+     * @param array $config
+     */
+    public function initialize(array $config)
+    {
         $this->conn = new Connection();
-        $this->table = $table;
-        $this->conn->setParams(['host' => $config['host'], 'port' => $config['port']]);
+        $this->conn->setParams([
+            'host' => $this->config('connection')['host'],
+            'port' => $this->config('connection')['port'],
+        ]);
     }
-
 
     /**
      * @param $options (match_fields, paginate)
-     * @return Query
+     * @return \Cake\ORM\Query
      */
-    public function search($options) {
+    public function search(array $options)
+    {
         $sphinx = SphinxQL::create($this->conn)->select('id')
             ->from($options['index'])
             ->match((empty($options['match_fields']) ? "*" : $options['match_fields']), $options['term'])
             ->limit((empty($options['limit'])) ? 1000 : $options['limit']);
 
-        $result = $sphinx->execute();
+        $result = $sphinx->execute()->fetchAllAssoc();
 
         if (!empty($result)) {
 
             $ids = Hash::extract($result, '{n}.id');
-            
-            $query = $this->table->find();
+            $query = $this->_table->find();
             
             if (!empty($options['paginate']['fields'])) {
                 $query->select($options['paginate']['fields']);
@@ -48,7 +60,7 @@ class SphinxBehavior extends Behavior
                 $query->contain($options['paginate']['contain']);
             }
             
-            $query->where([$this->table->alias() . '.id IN' => $ids]);
+            $query->where([$this->_table->alias() . '.' . $this->_table->primaryKey() . ' IN' => $ids]);
 
             return $query;
         }
