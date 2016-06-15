@@ -20,6 +20,7 @@ class SphinxBehavior extends Behavior
             'host' => 'localhost',
             'port' => '9306',
         ],
+        'defaultIndex' => '',
     ];
 
     /**
@@ -40,15 +41,15 @@ class SphinxBehavior extends Behavior
      */
     public function search(array $options)
     {
+        $index = isset($options['index']) ? $options['index'] : $this->config('defaultIndex');
         $sphinx = SphinxQL::create($this->conn)->select('id')
-            ->from($options['index'])
+            ->from($index)
             ->match((empty($options['match_fields']) ? "*" : $options['match_fields']), $options['term'])
             ->limit((empty($options['limit'])) ? 1000 : $options['limit']);
 
         $result = $sphinx->execute()->fetchAllAssoc();
 
         if (!empty($result)) {
-
             $ids = Hash::extract($result, '{n}.id');
             $query = $this->_table->find();
             
