@@ -27,6 +27,9 @@ It currently has one function and that is to query the provided index and return
 * Add ````Plugin::load('Sphinx');```` to your bootstrap.php
 * Attach the behaviour to a table you wish to search on 
 (There must be an index that is generated from this model - the behaviour works by pulling the ID's from Sphinx and then fetching them from the DB (See TODO's for improving this)
+* Behavior config options:
+  * `'connection' => ['host' => 'hostname', 'port' => 'port']` (default hostname is 'localhost' and default port is 9306)
+  * `'defaultIndex' => 'index_name'`
 
 ```php
 <?php 
@@ -51,7 +54,6 @@ class PostsTable extends Table
         $this->addBehavior('Sphinx.Sphinx');
     }
 }
-?>
 ```
 
 * Perform a search through the behaviour directly (This will return a query object), it takes an array of the following parameters:
@@ -104,7 +106,6 @@ public function testBehaviour()
 }
 ```
 ###TODO
-* Allow for custom configuration to be passed in
 * Give option for all data to be pulled from Sphinxsearch directly rather than then querying DB
 * Hook into afterSave and have the Sphinx index updated (this isn't a priority for me as my indexes don't need to be live but please submit a pull request if you want to add this)
 * Work out how to test this easily on Travis (again - help appreciated)
