@@ -25,6 +25,7 @@ class SphinxBehavior extends Behavior
 
     /**
      * @param array $config
+     * @return void
      */
     public function initialize(array $config)
     {
@@ -37,7 +38,7 @@ class SphinxBehavior extends Behavior
 
     /**
      * @param $options (match_fields, paginate)
-     * @return \Cake\ORM\Query
+     * @return \Cake\ORM\Query|bool
      */
     public function search(array $options)
     {
